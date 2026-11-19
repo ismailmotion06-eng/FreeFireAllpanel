@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Get Key - 5 Step Verification</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+    body {
+      background: #0d0b1a;
+      color: #f3f0ff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+    }
+    .container {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .card {
+      background: #1a1530;
+      border: 1px solid #3c2a70;
+      border-radius: 14px;
+      padding: 22px 18px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+    .article-box {
+      background: #151128;
+      border: 1px solid #2b2152;
+      border-radius: 12px;
+      padding: 18px;
+      text-align: left;
+    }
+    .article-box h2 {
+      font-size: 17px;
+      color: #ffd000;
+      margin-bottom: 10px;
+    }
+    .article-box p {
+      font-size: 14px;
+      color: #cfc7e6;
+      line-height: 1.65;
+      margin-bottom: 10px;
+    }
+    .article-box p:last-child { margin-bottom: 0; }
+    .badge {
+      display: inline-block;
+      background: #ffd000;
+      color: #141024;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    h1 { font-size: 20px; margin-bottom: 10px; color: #ffffff; }
+    p { font-size: 14px; color: #c7bedf; line-height: 1.5; }
+    .timer-circle {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      border: 4px solid #a855f7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: 800;
+      color: #ffd000;
+      margin: 18px auto;
+      background: #120e24;
+    }
+    .ad-box {
+      background: #141026;
+      border: 1px dashed #4c3a85;
+      border-radius: 10px;
+      min-height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #7c6ca8;
+      font-size: 13px;
+      padding: 10px;
+      overflow: hidden;
+    }
+    .btn {
+      display: inline-block;
+      width: 100%;
+      padding: 15px;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: 0.2s;
+      text-align: center;
+    }
+    .btn-primary { background: #ffd000; color: #141024; }
+    .btn-primary:hover { background: #ffdf4d; }
+    .btn-purple { background: #9333ea; color: #ffffff; }
+    .btn-purple:hover { background: #a855f7; }
+    .btn-disabled {
+      background: #32294d !important;
+      color: #887ca8 !important;
+      pointer-events: none;
+      cursor: not-allowed;
+    }
+    .status-msg {
+      margin-top: 14px;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      display: none;
+    }
+    .status-info { background: #261e47; color: #ffd000; }
+    .status-success { background: #143624; color: #4ade80; }
+    .status-warn { background: #3f1d24; color: #f87171; }
+    .password-box {
+      background: #0d0b1a;
+      border: 2px solid #4ade80;
+      border-radius: 10px;
+      padding: 16px;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #4ade80;
+      margin: 16px 0;
+      word-break: break-all;
+    }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- ================= AD SLOT 1 (Top Banner) ================= -->
+    <div class="ad-box">
+      <!-- এখানে Adsterra বা Monetag এর 300x250 ব্যানার কোড বসান -->
+      <span>AD SLOT 1 (Top Banner)</span>
+    </div>
+
+    <!-- ================= PHASE A: 15s Timer + Content + Continue ================= -->
+    <div id="phase-a" class="hidden">
+      <div class="card">
+        <div class="badge" id="badge-a">STEP 1 / 5</div>
+        <h1>Unlock File Password</h1>
+        <p>Please wait for the countdown timer to finish before proceeding.</p>
+        <div class="timer-circle" id="timer-a">15</div>
+        <div id="scroll-msg" class="status-msg status-success">
+          Time is up! Scroll down to the bottom and tap Continue ↓
+        </div>
+      </div>
+
+      <!-- Article Content Part 1 -->
+      <div class="article-box" style="margin-top: 18px;">
+        <h2 id="art-title-1"></h2>
+        <p id="art-body-1"></p>
+      </div>
+
+      <!-- AD SLOT 2 (Middle Banner) -->
+      <div class="ad-box" style="margin-top: 18px;">
+        <!-- এখানে ২য় ব্যানার বা Native Banner কোড বসান -->
+        <span>AD SLOT 2 (Middle Banner)</span>
+      </div>
+
+      <!-- Article Content Part 2 -->
+      <div class="article-box" style="margin-top: 18px;">
+        <h2 id="art-title-2"></h2>
+        <p id="art-body-2"></p>
+      </div>
+
+      <!-- AD SLOT 3 (Bottom Banner) -->
+      <div class="ad-box" style="margin-top: 18px;">
+        <!-- এখানে ৩য় ব্যানার কোড বসান -->
+        <span>AD SLOT 3 (Bottom Banner)</span>
+      </div>
+
+      <div class="card" style="margin-top: 18px;">
+        <button id="btn-continue" class="btn btn-primary btn-disabled" disabled>
+          Please Wait (15s)...
+        </button>
+      </div>
+    </div>
+
+    <!-- ================= PHASE B: 3s Wait + Ad Click & Return ================= -->
+    <div id="phase-b" class="hidden">
+      <div class="card">
+        <div class="badge" id="badge-b">STEP 1 / 5 • VERIFY</div>
+        <h1>Quick Verification</h1>
+        <p>Wait 3 seconds, then tap the button below to visit the sponsor page. Stay for at least 3 seconds and come back here to complete this step.</p>
+        <div class="timer-circle" id="timer-b">3</div>
+
+        <a id="btn-ad-click" href="javascript:void(0)" target="_blank" rel="noopener noreferrer" class="btn btn-purple btn-disabled">
+          Please Wait (3s)...
+        </a>
+
+        <div id="verify-status" class="status-msg status-info"></div>
+
+        <button id="btn-next-step" class="btn btn-primary hidden" style="margin-top: 14px;">
+          Proceed to Next Step →
+        </button>
+      </div>
+
+      <!-- AD SLOT 4 (Verification Page Banner) -->
+      <div class="ad-box" style="margin-top: 18px;">
+        <!-- এখানে ব্যানার অ্যাড কোড বসান -->
+        <span>AD SLOT 4 (Verify Page Banner)</span>
+      </div>
+    </div>
+
+    <!-- ================= FINAL PAGE: PASSWORD ================= -->
+    <div id="phase-done" class="hidden">
+      <div class="card">
+        <div class="badge" style="background: #4ade80;">ALL 5 STEPS COMPLETED</div>
+        <h1>Your File Password</h1>
+        <p>Copy the password below and use ZArchiver or WinRAR to extract your file:</p>
+        <div class="password-box" id="final-password"></div>
+        <button id="btn-copy" class="btn btn-primary">Copy Password</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ================== এখান থেকে সেটিংস এবং কনটেন্ট বদলান ==================
+    const CONFIG = {
+      TOTAL_STEPS: 5,
+      WAIT_PHASE_A: 15,         // প্রথম পেজে ১৫ সেকেন্ড
+      WAIT_PHASE_B: 3,          // দ্বিতীয় পেজে ৩ সেকেন্ড
+      MIN_AD_STAY_SECONDS: 3,   // অ্যাডে ক্লিক করে অন্তত ৩ সেকেন্ড থাকতে হবে
+      DIRECT_LINK_URL: "https://example.com", // এখানে Adsterra/Monetag Direct Link বসান
+      SECRET_PASSWORD_BASE64: btoa("FREE-KEY-2026") // এখানে আপনার ফাইলের পাসওয়ার্ড লিখুন
+    };
+
+    // প্রতিটি স্টেপের পেজ কনটেন্ট (চাইলে নিজের মতো এডিট করতে পারবেন)
+    const STEP_ARTICLES = [
+      {
+        t1: "How to Safely Extract Protected ZIP Files",
+        p1: "Password-protected archives keep downloads safe from corruption and unauthorized tampering. On Android devices, apps like ZArchiver or RAR let you extract large files quickly without losing folder structure.",
+        t2: "Storage & Compatibility Check",
+        p2: "Before extracting, make sure your device has at least double the archive size in free storage space. Keeping your extraction tool updated prevents checksum errors during decompression."
+      },
+      {
+        t1: "Why Multi-Step Verification Keeps Access Free",
+        p1: "Hosting premium files and keeping download mirrors active costs server bandwidth. Short sponsor checks allow creators to distribute paid resources completely free to the community.",
+        t2: "Tips for Faster Unlocking",
+        p2: "Keep this browser tab open while completing each step. Closing the browser completely or switching to incognito mode resets your progress back to Step 1."
+      },
+      {
+        t1: "Optimizing Android Performance for Large Files",
+        p1: "Clearing cached junk files and closing unused background apps frees up RAM, making file extraction and installation noticeably faster on mid-range smartphones.",
+        t2: "Using Split APK & Archive Tools",
+        p2: "If your download contains multiple packages or data folders, always read the included README text file first so every asset goes into the correct directory."
+      },
+      {
+        t1: "Keeping Your Downloads Secure",
+        p1: "Always verify file sizes after downloading over mobile data or unstable Wi-Fi. An incomplete download is the most common reason an archive reports an incorrect password error.",
+        t2: "Backup Before Applying Changes",
+        p2: "Whenever you replace configuration files or install new resource packs, keep a quick backup copy of your original folder so you can restore defaults anytime."
+      },
+      {
+        t1: "Almost Done — Final Step Ready",
+        p1: "You have reached the final verification step. Once you complete the quick sponsor check on the next screen, your file password will unlock immediately.",
+        t2: "Need Help Extracting?",
+        p2: "Copy the password directly using the Copy button on the final screen to avoid accidental spaces or uppercase/lowercase typing mistakes."
+      }
+    ];
+    // =========================================================================
+
+    const STORAGE_KEY = "unlock_en_state_v1";
+
+    function getState() {
+      try {
+        const raw = sessionStorage.getItem(STORAGE_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch (e) {}
+      return { step: 1, phase: "A" };
+    }
+
+    function saveStateAndReload(newState) {
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
+      window.location.reload();
+    }
+
+    const state = getState();
+
+    // PHASE A
+    if (state.phase === "A") {
+      document.getElementById("phase-a").classList.remove("hidden");
+      document.getElementById("badge-a").textContent = `STEP ${state.step} / ${CONFIG.TOTAL_STEPS}`;
+
+      // Load article content for current step
+      const art = STEP_ARTICLES[(state.step - 1) % STEP_ARTICLES.length];
+      document.getElementById("art-title-1").textContent = art.t1;
+      document.getElementById("art-body-1").textContent = art.p1;
+      document.getElementById("art-title-2").textContent = art.t2;
+      document.getElementById("art-body-2").textContent = art.p2;
+
+      let timeLeft = CONFIG.WAIT_PHASE_A;
+      const timerEl = document.getElementById("timer-a");
+      const btnContinue = document.getElementById("btn-continue");
+      const scrollMsg = document.getElementById("scroll-msg");
+
+      timerEl.textContent = timeLeft;
+      btnContinue.textContent = `Please Wait (${timeLeft}s)...`;
+
+      const intervalA = setInterval(() => {
+        timeLeft--;
+        timerEl.textContent = timeLeft;
+        if (timeLeft > 0) {
+          btnContinue.textContent = `Please Wait (${timeLeft}s)...`;
+        } else {
+          clearInterval(intervalA);
+          timerEl.textContent = "✓";
+          scrollMsg.style.display = "block";
+          btnContinue.classList.remove("btn-disabled");
+          btnContinue.disabled = false;
+          btnContinue.textContent = "Continue →";
+        }
+      }, 1000);
+
+      btnContinue.addEventListener("click", () => {
+        saveStateAndReload({ step: state.step, phase: "B" });
+      });
+    }
+
+    // PHASE B
+    else if (state.phase === "B") {
+      document.getElementById("phase-b").classList.remove("hidden");
+      document.getElementById("badge-b").textContent = `STEP ${state.step} / ${CONFIG.TOTAL_STEPS} • VERIFY`;
+
+      let timeLeft = CONFIG.WAIT_PHASE_B;
+      const timerEl = document.getElementById("timer-b");
+      const btnAd = document.getElementById("btn-ad-click");
+      const statusBox = document.getElementById("verify-status");
+      const btnNext = document.getElementById("btn-next-step");
+
+      let adClicked = false;
+      let clickTimestamp = 0;
+      let isVerified = false;
+
+      timerEl.textContent = timeLeft;
+      btnAd.textContent = `Please Wait (${timeLeft}s)...`;
+
+      const intervalB = setInterval(() => {
+        timeLeft--;
+        timerEl.textContent = timeLeft;
+        if (timeLeft > 0) {
+          btnAd.textContent = `Please Wait (${timeLeft}s)...`;
+        } else {
+          clearInterval(intervalB);
+          timerEl.textContent = "🔓";
+          btnAd.href = CONFIG.DIRECT_LINK_URL;
+          btnAd.classList.remove("btn-disabled");
+          btnAd.textContent = "Open Ad & Come Back";
+        }
+      }, 1000);
+
+      btnAd.addEventListener("click", () => {
+        if (btnAd.classList.contains("btn-disabled")) return;
+        adClicked = true;
+        clickTimestamp = Date.now();
+        statusBox.className = "status-msg status-info";
+        statusBox.textContent = `Stay on the opened page for at least ${CONFIG.MIN_AD_STAY_SECONDS} seconds, then return to this tab...`;
+        statusBox.style.display = "block";
+      });
+
+      function checkUserReturn() {
+        if (!adClicked || isVerified) return;
+        const stayedSeconds = (Date.now() - clickTimestamp) / 1000;
+
+        if (stayedSeconds >= CONFIG.MIN_AD_STAY_SECONDS) {
+          isVerified = true;
+          statusBox.className = "status-msg status-success";
+          statusBox.textContent = `Step ${state.step} Completed!`;
+          btnAd.classList.add("hidden");
+          btnNext.classList.remove("hidden");
+
+          if (state.step < CONFIG.TOTAL_STEPS) {
+            btnNext.textContent = `Start Step ${state.step + 1} →`;
+          } else {
+            btnNext.textContent = "Unlock Password";
+          }
+        } else {
+          adClicked = false;
+          statusBox.className = "status-msg status-warn";
+          statusBox.textContent = `Returned too fast! Tap the button, stay for at least ${CONFIG.MIN_AD_STAY_SECONDS} seconds, and come back.`;
+        }
+      }
+
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) checkUserReturn();
+      });
+      window.addEventListener("focus", checkUserReturn);
+
+      btnNext.addEventListener("click", () => {
+        if (state.step < CONFIG.TOTAL_STEPS) {
+          saveStateAndReload({ step: state.step + 1, phase: "A" });
+        } else {
+          saveStateAndReload({ step: CONFIG.TOTAL_STEPS, phase: "DONE" });
+        }
+      });
+    }
+
+    // FINAL PAGE
+    else if (state.phase === "DONE") {
+      document.getElementById("phase-done").classList.remove("hidden");
+      const pwd = atob(CONFIG.SECRET_PASSWORD_BASE64);
+      document.getElementById("final-password").textContent = pwd;
+
+      document.getElementById("btn-copy").addEventListener("click", () => {
+        navigator.clipboard.writeText(pwd).then(() => {
+          document.getElementById("btn-copy").textContent = "Password Copied!";
+        });
+      });
+    }
+  </script>
+</body>
+</html>
